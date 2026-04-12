@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Générateur de Recettes pour Aliments Spécifiques | Composez Votre Recette Idéale</title>
+    <meta name="description" content="Créez des recettes personnalisées en fonction d">
+    <style>
+        :root {
+            --color-primary: #FF6B6B; /* Bright Red */
+            --color-secondary: #4ECDC4; /* Teal */
+            --color-accent: #FFE66D; /* Yellow */
+            --color-text: #333;
+            --color-background: #F7FFF7; /* Light Greenish White */
+            --color-card-bg: #FFFFFF;
+            --font-headline: 'Georgia', serif;
+            --font-body: 'Arial', sans-serif;
+            --shadow-light: 0 4px 8px rgba(0,0,0,0.05);
+            --shadow-medium: 0 8px 16px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--color-text);
+            background-color: var(--color-background);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        header {
+            background-color: var(--color-primary);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-medium);
+        }
+
+        header h1 {
+            font-family: var(--font-headline);
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            line-height: 1.1;
+        }
+
+        header p {
+            font-size: 1.2em;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .section {
+            background-color: var(--color-card-bg);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-light);
+        }
+
+        .section h2 {
+            font-family: var(--font-headline);
+            color: var(--color-primary);
+            font-size: 2em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--color-text);
+        }
+
+        input[type="text"],
+        textarea,
+        select {
+            width: calc(100% - 20px);
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            box-sizing: border-box;
+            background-color: #fcfcfc;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .checkbox-group label {
+            display: inline-block;
+            margin-right: 15px;
+            font-weight: normal;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 5px;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 15px 25px;
+            background-color: var(--color-secondary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: var(--shadow-light);
+        }
+
+        button:hover {
+            background-color: #3BBFBA;
+            transform: translateY(-2px);
+        }
+
+        .tool-result {
+            background-color: #e6f7f7; /* Lighter teal */
+            border-left: 5px solid var(--color-secondary);
+            padding: 25px;
+            border-radius: 8px;
+            margin-top: 30px;
+            min-height: 150px;
+        }
+
+        .tool-result h3 {
+            color: var(--color-secondary);
+            font-family: var(--font-headline);
+            margin-top: 0;
+            font-size: 1.6em;
+            margin-bottom: 15px;
+        }
+
+        .result-group {
+            margin-bottom: 20px;
+        }
+        .result-group h4 {
+            color: var(--color-primary);
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            border-bottom: 1px solid var(--color-accent);
+            padding-bottom: 5px;
+        }
+        .result-group ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .result-group li {
+            background-color: var(--color-card-bg);
+            border: 1px solid #eee;
+            margin-bottom: 8px;
+            padding: 10px 15px;
+            border-radius: 6px;
+            transition: background-color 0.2s ease;
+        }
+        .result-group li:hover {
+            background-color: #f0f8f8;
+        }
+
+        .seo-section {
+            padding: 40px 20px;
+            background-color: #f0f0f0;
+            border-radius: 12px;
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        .seo-section h2 {
+            color: var(--color-text);
+            font-family: var(--font-headline);
+            margin-bottom: 25px;
+            font-size: 2.2em;
+        }
+
+        .seo-section p {
+            max-width: 800px;
+            margin: 0 auto 15px auto;
+            font-size: 1.1em;
+            color: #555;
+        }
+
+        .seo-section ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .seo-section li {
+            background-color: var(--color-card-bg);
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px 15px;
+            font-size: 0.95em;
+            color: var(--color-primary);
+            font-weight: bold;
+            box-shadow: var(--shadow-light);
+        }
+
+        footer {
+            margin-top: 50px;
+            padding: 20px;
+            text-align: center;
+            color: #777;
+            font-size: 0.9em;
+            background-color: var(--color-background);
+        }
+    </style>
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://generateur-de-recettes-pour-aliments-specifiques-2.onrender.com">
+    <meta property="og:title" content="Générateur de Recettes pour Aliments Spécifiques">
+    <meta property="og:description" content="Créez des recettes personnalisées en fonction d">
+    <meta property="og:url" content="https://generateur-de-recettes-pour-aliments-specifiques-2.onrender.com">
+    <meta property="og:type" content="website">
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Générateur de Recettes pour Aliments Spécifiques", "description": "Créez des recettes personnalisées en fonction d", "url": "https://generateur-de-recettes-pour-aliments-specifiques-2.onrender.com", "applicationCategory": "UtilityApplication", "operatingSystem": "Web Browser"}</script>
+</head>
+<body data-site-slug="generateur-de-recettes-pour-aliments-specifiques-2" data-runtime-mode="document_generator">
+    <header>
+        <div class="container">
+            <h1>Cuisinez Malin : Votre Générateur de Recettes sur Mesure !</h1>
+            <p>Dites adieu au casse-tête des repas ! Créez des recettes délicieuses et adaptées à vos besoins : allergies, régimes spécifiques (vegan, keto, sans gluten...) et même les ingrédients que vous avez déjà sous la main. Moins de gaspillage, plus de plaisir en cuisine !</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <section class="section">
+            <h2>Composez Votre Recette Idéale</h2>
+            <p>Remplissez les champs ci-dessous pour nous aider à concocter la suggestion parfaite pour vous.</p>
+            <form id="tool-form">
+                <div class="form-group">
+                    <label for="ingredients">Ingrédients que j'ai (séparés par des virgules) :</label>
+                    <textarea id="ingredients" placeholder="Ex: poulet, riz, brocoli, ail, sauce soja"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="allergies">Allergies ou Intolérances (séparées par des virgules) :</label>
+                    <input type="text" id="allergies" placeholder="Ex: arachides, lactose, gluten">
+                </div>
+
+                <div class="form-group">
+                    <label>Régimes alimentaires :</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="diet" value="vegan"> Végan</label>
+                        <label><input type="checkbox" name="diet" value="vegetarien"> Végétarien</label>
+                        <label><input type="checkbox" name="diet" value="keto"> Céto (Keto)</label>
+                        <label><input type="checkbox" name="diet" value="sans-gluten"> Sans Gluten</label>
+                        <label><input type="checkbox" name="diet" value="sans-lactose"> Sans Lactose</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="dish-type">Type de plat souhaité (facultatif) :</label>
+                    <select id="dish-type">
+                        <option value="">N'importe</option>
+                        <option value="plat-principal">Plat Principal</option>
+                        <option value="entree">Entrée</option>
+                        <option value="dessert">Dessert</option>
+                        <option value="petit-dejeuner">Petit-déjeuner</option>
+                        <option value="soupe">Soupe</option>
+                        <option value="salade">Salade</option>
+                    </select>
+                </div>
+
+                <button type="submit" id="tool-submit" data-affiliate-slot="recipe-generator-cta">Générer ma Recette !</button>
+            </form>
+
+            <div id="tool-result" class="tool-result" style="display:none;">
+                <h3 id="result-headline">Votre Recette Personnalisée :</h3>
+                <div id="recipe-output"></div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Pourquoi Cuisiner avec Notre Générateur ?</h2>
+            <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
+                <div style="flex: 1; min-width: 280px; padding: 15px; border: 1px solid #eee; border-radius: 8px; background-color: #fdfdfd;">
+                    <h3 style="color: var(--color-secondary); font-family: var(--font-headline); margin-top: 0;">Zéro Gaspillage</h3>
+                    <p>Utilisez intelligemment vos restes et ingrédients du frigo avant qu'ils ne périment. Fini le gaspillage alimentaire !</p>
+                </div>
+                <div style="flex: 1; min-width: 280px; padding: 15px; border: 1px solid #eee; border-radius: 8px; background-color: #fdfdfd;">
+                    <h3 style="color: var(--color-secondary); font-family: var(--font-headline); margin-top: 0;">Adapté à Tous</h3>
+                    <p>Que vous soyez vegan, intolérant au gluten ou que vous suiviez un régime spécifique, nos recettes sont faites pour vous.</p>
+                </div>
+                <div style="flex: 1; min-width: 280px; padding: 15px; border: 1px solid #eee; border-radius: 8px; background-color: #fdfdfd;">
+                    <h3 style="color: var(--color-secondary); font-family: var(--font-headline); margin-top: 0;">Inspiration Quotidienne</h3>
+                    <p>Découvrez de nouvelles saveurs et des idées originales pour pimenter vos repas, sans effort ni stress.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <section class="seo-section">
+        <h2>Trouvez l'inspiration culinaire sur mesure avec "Cuisinez Malin"</h2>
+        <p>Vous recherchez des <a href="#" style="color: var(--color-primary); text-decoration: none;">recettes faciles</a>, des <a href="#" style="color: var(--color-primary); text-decoration: none;">idées de repas sains</a> ou un moyen d'éviter le <a href="#" style="color: var(--color-primary); text-decoration: none;">gaspillage alimentaire</a> ? Notre générateur de recettes intelligent est la solution. Il vous aide à transformer vos <a href="#" style="color: var(--color-primary); text-decoration: none;">ingrédients du frigo</a> en délices adaptés à vos <a href="#" style="color: var(--color-primary); text-decoration: none;">allergies alimentaires</a> et à votre <a href="#" style="color: var(--color-primary); text-decoration: none;">régime spécifique</a>. Que vous soyez à la recherche de <a href="#" style="color: var(--color-primary); text-decoration: none;">recettes vegan sans gluten</a>, de <a href="#" style="color: var(--color-primary); text-decoration: none;">plats céto rapides</a> ou de <a href="#" style="color: var(--color-primary); text-decoration: none;">menus végétariens équilibrés</a>, notre outil est fait pour vous. Cuisiner devient un jeu d'enfant, même avec des contraintes !</p>
+        <ul>
+            <li>Recettes adaptées</li>
+            <li>Cuisine anti-gaspi</li>
+            <li>Idées repas personnalisées</li>
+            <li>Plats sans allergènes</li>
+            <li>Régime végétarien</li>
+            <li>Recettes sans gluten</li>
+            <li>Cuisine Keto France</li>
+            <li>Menus simples et rapides</li>
+        </ul>
+    </section>
+
+    <footer>
+        <p>&copy; 2023 Cuisinez Malin. Tous droits réservés.</p>
+    </footer>
+
+    <script>
+        document.getElementById('tool-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const ingredientsInput = document.getElementById('ingredients').value.toLowerCase().split(',').map(s => s.trim()).filter(s => s.length > 0);
+            const allergiesInput = document.getElementById('allergies').value.toLowerCase().split(',').map(s => s.trim()).filter(s => s.length > 0);
+            const selectedDiets = Array.from(document.querySelectorAll('input[name="diet"]:checked')).map(cb => cb.value);
+            const dishType = document.getElementById('dish-type').value;
+
+            const recipes = generateRecipes(ingredientsInput, allergiesInput, selectedDiets, dishType);
+            displayRecipes(recipes);
+        });
+
+        function generateRecipes(ingredients, allergies, diets, dishType) {
+            let baseRecipes = [
+                {
+                    name: "Curry de Légumes Express",
+                    description: "Un curry végétarien riche en saveurs, idéal pour un repas rapide.",
+                    ingredients: ["légumes de saison", "lait de coco", "pâte de curry", "riz"],
+                    diet: ["vegetarien", "vegan", "sans-gluten", "sans-lactose"],
+                    allergens: []
+                },
+                {
+                    name: "Poulet Rôti aux Herbes de Provence",
+                    description: "Un classique revisité pour les amateurs de viande.",
+                    ingredients: ["poulet", "pommes de terre", "herbes de provence", "ail"],
+                    diet: [],
+                    allergens: []
+                },
+                {
+                    name: "Salade Quinoa et Avocat",
+                    description: "Une salade fraîche et nutritive, parfaite pour un déjeuner léger.",
+                    ingredients: ["quinoa", "avocat", "tomate", "concombre", "citron"],
+                    diet: ["vegetarien", "vegan", "sans-gluten", "sans-lactose"],
+                    allergens: []
+                },
+                {
+                    name: "Pâtes Carbonara Façon Healthy",
+                    description: "Une version plus légère de la carbonara, avec des légumes.",
+                    ingredients: ["pâtes", "œufs", "lardons de dinde", "petits pois"],
+                    diet: [],
+                    allergens: ["gluten", "lactose"] // Can be adapted
+                },
+                {
+                    name: "Brochettes de Crevettes Marinées",
+                    description: "Des brochettes savoureuses pour une grillade estivale.",
+                    ingredients: ["crevettes", "poivrons", "oignons", "sauce soja", "miel"],
+                    diet: ["sans-gluten"], // if soy sauce is gluten-free
+                    allergens: ["soja"]
+                },
+                {
+                    name: "Omelette Fromagère aux Champignons",
+                    description: "Un plat simple et réconfortant pour toute occasion.",
+                    ingredients: ["œufs", "champignons", "fromage", "oignon"],
+                    diet: ["vegetarien"],
+                    allergens: ["lactose"]
+                },
+                {
+                    name: "Soupe de Lentilles Corail au Curcuma",
+                    description: "Une soupe épicée et réchauffante, pleine de fibres.",
+                    ingredients: ["lentilles corail", "carottes", "oignon", "curcuma", "bouillon de légumes"],
+                    diet: ["vegetarien", "vegan", "sans-gluten", "sans-lactose"],
+                    allergens: []
+                },
+                 {
+                    name: "Bowl de Buddha Végétarien",
+                    description: "Un bol complet et équilibré avec des protéines végétales.",
+                    ingredients: ["riz", "pois chiches", "patate douce", "épinards", "sauce tahini"],
+                    diet: ["vegetarien", "vegan", "sans-gluten", "sans-lactose"],
+                    allergens: ["sésame"]
+                },
+                 {
+                    name: "Tofu Scrambled aux Épices",
+                    description: "Une alternative végane aux œufs brouillés pour le petit-déjeuner.",
+                    ingredients: ["tofu ferme", "curcuma", "oignon", "levure maltée", "épinards"],
+                    diet: ["vegan", "vegetarien", "sans-gluten", "sans-lactose"],
+                    allergens: ["soja"]
+                },
+                {
+                    name: "Steak de Chou-fleur Rôti",
+                    description: "Une option végétarienne surprenante et délicieuse, riche en saveurs.",
+                    ingredients: ["chou-fleur", "huile d'olive", "paprika", "cumin", "ail"],
+                    diet: ["vegan", "vegetarien", "sans-gluten", "sans-lactose"],
+                    allergens: []
+                }
+            ];
+
+            let suggestedRecipes = [];
+
+            // Filter by ingredients first (must contain at least 2 user-provided ingredients OR all if user provided 2 or less)
+            let ingredientMatchedRecipes = baseRecipes.filter(recipe => {
+                if (ingredients.length === 0) return true; // If no ingredients provided, all recipes are candidates
+                const matchingIngredients = recipe.ingredients.filter(ingredient => ingredients.includes(ingredient));
+                return matchingIngredients.length >= Math.min(2, ingredients.length);
+            });
+
+            // Then filter by allergies
+            let allergyFilteredRecipes = ingredientMatchedRecipes.filter(recipe => {
+                return !allergies.some(allergy => recipe.allergens.includes(allergy));
+            });
+
+            // Then filter by diets
+            let dietFilteredRecipes = allergyFilteredRecipes.filter(recipe => {
+                if (diets.length === 0) return true; // If no diet selected, all recipes are candidates
+                return diets.every(diet => recipe.diet.includes(diet));
+            });
+
+            // Finally, filter by dish type if specified
+            if (dishType && dishType !== "") {
+                dietFilteredRecipes = dietFilteredRecipes.filter(recipe => {
+                    // This is a simple mapping, extend if necessary
+                    const recipeDishTypeMap = {
+                        "Curry de Légumes Express": "plat-principal",
+                        "Poulet Rôti aux Herbes de Provence": "plat-principal",
+                        "Salade Quinoa et Avocat": "salade",
+                        "Pâtes Carbonara Façon Healthy": "plat-principal",
+                        "Brochettes de Crevettes Marinées": "plat-principal",
+                        "Omelette Fromagère aux Champignons": "petit-dejeuner",
+                        "Soupe de Lentilles Corail au Curcuma": "soupe",
+                        "Bowl de Buddha Végétarien": "plat-principal",
+                        "Tofu Scrambled aux Épices": "petit-dejeuner",
+                        "Steak de Chou-fleur Rôti": "plat-principal"
+                    };
+                    return recipeDishTypeMap[recipe.name] === dishType;
+                });
+            }
+
+            // Shuffle and pick top 3 for variety
+            suggestedRecipes = dietFilteredRecipes.sort(() => 0.5 - Math.random()).slice(0, 3);
+
+            if (suggestedRecipes.length === 0) {
+                 return [{ name: "Aucune recette trouvée", description: "Désolé, nous n'avons pas pu trouver de recette correspondant à tous vos critères. Essayez d'élargir vos options ou de fournir plus d'ingrédients !", ingredients: [], diet: [], allergens: [] }];
+            }
+
+            return suggestedRecipes;
+        }
+
+
+        function displayRecipes(recipes) {
+            const resultDiv = document.getElementById('tool-result');
+            const recipeOutput = document.getElementById('recipe-output');
+            recipeOutput.innerHTML = '';
+
+            if (recipes.length > 0) {
+                recipes.forEach(recipe => {
+                    const recipeCard = document.createElement('div');
+                    recipeCard.classList.add('result-group');
+                    recipeCard.innerHTML = `
+                        <h4>${recipe.name}</h4>
+                        <p>${recipe.description}</p>
+                        <h5>Ingrédients clés suggérés :</h5>
+                        <ul>
+                            ${recipe.ingredients.map(ing => `<li>${ing.charAt(0).toUpperCase() + ing.slice(1)}</li>`).join('')}
+                        </ul>
+                        ${recipe.diet.length > 0 ? `<h5>Régimes compatibles :</h5><ul>${recipe.diet.map(d => `<li>${d.charAt(0).toUpperCase() + d.slice(1).replace('-', ' ')}</li>`).join('')}</ul>` : ''}
+                        ${recipe.allergens.length > 0 ? `<h5>Allergènes potentiels :</h5><ul>${recipe.allergens.map(a => `<li>${a.charAt(0).toUpperCase() + a.slice(1)}</li>`).join('')}</ul>` : ''}
+                    `;
+                    recipeOutput.appendChild(recipeCard);
+                });
+            } else {
+                recipeOutput.innerHTML = '<p>Désolé, aucune recette ne correspond à vos critères. Essayez de modifier vos sélections !</p>';
+            }
+
+            resultDiv.style.display = 'block';
+        }
+    </script>
+<div id="qa-smoke-result" hidden></div>
+<script id="farmbuilder-affiliate-helper">
+(function () {
+  window.__UTILITY_AFFILIATE_MAP = window.__UTILITY_AFFILIATE_MAP || {};
+  document.addEventListener("click", function (event) {
+    const target = event.target.closest("[data-affiliate-slot]");
+    if (!target) return;
+    const slot = target.getAttribute("data-affiliate-slot");
+    const href = window.__UTILITY_AFFILIATE_MAP[slot];
+    if (!href) return;
+    if (target.tagName && target.tagName.toLowerCase() === "a") {
+      target.setAttribute("href", href);
+      target.setAttribute("rel", "nofollow sponsored noopener noreferrer");
+      return;
+    }
+    event.preventDefault();
+    window.open(href, "_blank", "noopener");
+  }, true);
+})();
+</script>
+<script id="farmbuilder-functional-qa">
+(function () {
+  function marker() {
+    let node = document.getElementById("qa-smoke-result");
+    if (node) return node;
+    node = document.createElement("div");
+    node.id = "qa-smoke-result";
+    node.hidden = true;
+    document.body.appendChild(node);
+    return node;
+  }
+
+  let qaFinished = false;
+  let qaWatchdog = null;
+
+  function normalize(text) {
+    return String(text || "").replace(/\s+/g, " ").trim();
+  }
+
+  function findForm() {
+    return document.getElementById("tool-form") || document.querySelector("form");
+  }
+
+  function findResult() {
+    return (
+      document.getElementById("tool-result") ||
+      document.querySelector("[data-result]") ||
+      document.querySelector(".tool-result, .result-card, .result, .results, .output, .preview, .diagnostic, .analysis")
+    );
+  }
+
+  function primaryAction(form) {
+    if (!form) return null;
+    return (
+      document.getElementById("tool-submit") ||
+      form.querySelector("#tool-submit") ||
+      form.querySelector("[data-primary-action]") ||
+      form.querySelector("button[type=submit]") ||
+      form.querySelector("button") ||
+      form.querySelector("input[type=submit]")
+    );
+  }
+
+  function resultSignature(node) {
+    if (!node) return "";
+    const text = normalize(node.textContent);
+    const html = normalize(node.innerHTML).slice(0, 600);
+    return `${text}||${html}`;
+  }
+
+  function resultHeadline(node) {
+    if (!node) return "";
+    const heading = node.querySelector("h1, h2, h3, strong, b");
+    return normalize(heading ? heading.textContent : "");
+  }
+
+  function sampleText(field) {
+    const key = `${field.id || ""} ${field.name || ""} ${field.placeholder || ""}`.toLowerCase();
+    if (/email/.test(key)) return "bonjour@example.com";
+    if (/url|site|website|lien/.test(key)) return "https://example.com/offre-solaire";
+    if (/phone|tel|mobile/.test(key)) return "0612345678";
+    if (/ville|city|localisation|location|region|departement|postal/.test(key)) return "Paris";
+    if (/orientation/.test(key)) return "sud";
+    if (/keyword|theme|topic|sujet|subject/.test(key)) return "energie solaire domestique";
+    if (/titre|title/.test(key)) return "Simulateur solaire maison";
+    if (/nom|name|project/.test(key)) return "Projet Horizon";
+    if (/description|notes|content|message/.test(key)) return "Maison individuelle exposee sud avec toiture exploitable.";
+    return field.placeholder || "France";
+  }
+
+  function sampleNumber(field) {
+    const key = `${field.id || ""} ${field.name || ""}`.toLowerCase();
+    if (/inclinaison|angle|slope/.test(key)) return "30";
+    if (/surface|size|m2|sqm/.test(key)) return "28";
+    if (/annee|year/.test(key)) return "2024";
+    if (/prix|price|budget|cost|amount|montant/.test(key)) return "12000";
+    const min = Number(field.min || "");
+    const max = Number(field.max || "");
+    if (Number.isFinite(min) && Number.isFinite(max) && max >= min) {
+      return String(Math.min(max, Math.max(min, min + Math.round((max - min) * 0.35))));
+    }
+    if (Number.isFinite(min)) return String(Math.max(min, 12));
+    if (Number.isFinite(max)) return String(Math.min(max, 12));
+    return field.value || "12";
+  }
+
+  function applySample(field) {
+    const tag = (field.tagName || "").toLowerCase();
+    const type = (field.type || "").toLowerCase();
+    if (field.disabled) return;
+    if (type === "hidden" || type === "submit" || type === "button" || type === "reset" || type === "image" || type === "file") {
+      return;
+    }
+    if (tag === "select") {
+      const option = Array.from(field.options || []).find((item) => item.value && !item.disabled) || field.options[0];
+      if (option) field.value = option.value;
+      return;
+    }
+    if (type === "checkbox") {
+      field.checked = true;
+      return;
+    }
+    if (type === "radio") {
+      field.checked = true;
+      return;
+    }
+    if (type === "date") {
+      field.value = "2026-03-01";
+      return;
+    }
+    if (type === "email") {
+      field.value = "bonjour@example.com";
+      return;
+    }
+    if (type === "url") {
+      field.value = "https://example.com/offre-solaire";
+      return;
+    }
+    if (type === "tel") {
+      field.value = "0612345678";
+      return;
+    }
+    if (type === "color") {
+      field.value = "#2f855a";
+      return;
+    }
+    if (type === "number" || type === "range") {
+      field.value = sampleNumber(field);
+      return;
+    }
+    field.value = sampleText(field);
+  }
+
+  function stamp(status, detail, headline, primary) {
+    if (qaFinished) return;
+    qaFinished = true;
+    if (qaWatchdog) {
+      window.clearTimeout(qaWatchdog);
+      qaWatchdog = null;
+    }
+    const node = marker();
+    node.dataset.status = status;
+    node.dataset.mode = "native-form";
+    node.dataset.detail = detail || "";
+    node.dataset.headline = headline || "";
+    node.dataset.primary = primary || "";
+    node.dataset.viewport = window.innerWidth <= 640 ? "mobile" : "desktop";
+    window.setTimeout(function () {
+      try {
+        window.stop();
+      } catch (_error) {}
+    }, 0);
+  }
+
+  function installModalGuards() {
+    const noop = function () {};
+    const approve = function () { return true; };
+    const empty = function () { return ""; };
+    try { window.alert = noop; } catch (_error) {}
+    try { window.confirm = approve; } catch (_error) {}
+    try { window.prompt = empty; } catch (_error) {}
+  }
+
+  function triggerAction(form, action) {
+    try {
+      if (typeof form.requestSubmit === "function") {
+        form.requestSubmit(action || undefined);
+        return;
+      }
+    } catch (_error) {}
+    if (action && typeof action.click === "function") {
+      action.click();
+      return;
+    }
+    form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+  }
+
+  function inspectResult(before, attemptsLeft) {
+    const result = findResult();
+    if (!result) {
+      stamp("fail", "La zone de resultat est introuvable.", "");
+      return;
+    }
+    const after = resultSignature(result);
+    const text = normalize(result.textContent);
+    if (after && after !== before && text.length >= 24) {
+      const primary = result.querySelector("a[href], button[data-href], [data-primary-url]") || document.querySelector("#tool-result a[href]");
+      stamp("pass", "Le formulaire natif a mis a jour la zone de resultat.", resultHeadline(result), primary ? (primary.getAttribute("href") || primary.getAttribute("data-primary-url") || "") : "");
+      return;
+    }
+    if (attemptsLeft > 0) {
+      window.setTimeout(function () {
+        inspectResult(before, attemptsLeft - 1);
+      }, 250);
+      return;
+    }
+    stamp("fail", "La zone de resultat n'a pas renvoye de contenu exploitable.", resultHeadline(result));
+  }
+
+  function runSmoke() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("__qa") !== "functional") return;
+    qaWatchdog = window.setTimeout(function () {
+      stamp("fail", "QA smoke timed out before the page reported a usable result.", "");
+    }, 7000);
+    const form = findForm();
+    if (!form) {
+      stamp("fail", "Le formulaire principal est introuvable.", "");
+      return;
+    }
+    const result = findResult();
+    const before = resultSignature(result);
+    installModalGuards();
+    try {
+      form.querySelectorAll("input, select, textarea").forEach(applySample);
+    } catch (error) {
+      stamp("fail", error && error.message ? `QA smoke sample failed: ${error.message}` : "QA smoke sample failed before submit.", "");
+      return;
+    }
+    const action = primaryAction(form);
+    try {
+      triggerAction(form, action);
+    } catch (error) {
+      stamp("fail", error && error.message ? `QA smoke submit failed: ${error.message}` : "QA smoke submit failed.", "");
+      return;
+    }
+    inspectResult(before, 10);
+  }
+
+  window.addEventListener("error", function (event) {
+    const message = event && event.message ? event.message : "JavaScript runtime error during QA smoke.";
+    stamp("fail", `QA smoke JS error: ${message}`, "");
+  }, { once: true });
+
+  window.addEventListener("unhandledrejection", function (event) {
+    const reason = event && event.reason;
+    const detail = typeof reason === "string"
+      ? reason
+      : reason && reason.message
+        ? reason.message
+        : "Unhandled promise rejection during QA smoke.";
+    stamp("fail", `QA smoke rejection: ${detail}`, "");
+  }, { once: true });
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", function () {
+      window.setTimeout(runSmoke, 60);
+    }, { once: true });
+  } else {
+    window.setTimeout(runSmoke, 60);
+  }
+})();
+</script>
+</body>
+</html>
